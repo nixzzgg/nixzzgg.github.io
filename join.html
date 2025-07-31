@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unirse al Servidor - SAB</title>
+    <title>Joiner</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -105,10 +105,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎮 Uniéndose al Servidor</h1>
+        <h1>Uniéndose al servidor</h1>
         <div id="status">
             <div class="spinner"></div>
-            <div class="loading">Redirigiendo a Roblox...</div>
+            <div class="loading">Redirigiendo a roblox...</div>
         </div>
         <div id="error-container" style="display: none;"></div>
     </div>
@@ -120,19 +120,15 @@
             const jobId = params.get('jobId');
             const gameInstanceId = params.get('gameInstanceId');
             
-            // Usar jobId si está disponible, sino gameInstanceId
             const instanceId = jobId || gameInstanceId;
             
             if (placeId && instanceId) {
-                // Crear el enlace de Roblox
                 const robloxLink = `roblox://placeId=${placeId}&jobId=${instanceId}`;
-                
-                // Intentar redireccionar después de 2 segundos
+        
                 setTimeout(() => {
                     try {
                         window.location.href = robloxLink;
                         
-                        // Después de 3 segundos, mostrar opciones manuales si no funcionó
                         setTimeout(() => {
                             showManualOptions(placeId, instanceId, robloxLink);
                         }, 3000);
@@ -165,17 +161,16 @@
         function showManualOptions(placeId, jobId, robloxLink) {
             const container = document.querySelector('.container');
             
-            // Actualizar el contenido
             container.innerHTML = `
-                <h1>🎮 Unirse al Servidor</h1>
+                <h1>Unirse al servidor</h1>
                 <div class="info">
                     <h3>📱 Instrucciones</h3>
                     <p>Si Roblox no se abrió automáticamente, puedes:</p>
                 </div>
                 
                 <div style="margin: 20px 0;">
-                    <a href="${robloxLink}" class="btn">🚀 Abrir Roblox</a>
-                    <a href="https://www.roblox.com/games/${placeId}" class="btn" target="_blank">🌐 Ir a la Página del Juego</a>
+                    <a href="${robloxLink}" class="btn">Abrir roblox</a>
+                    <a href="https://www.roblox.com/games/${placeId}" class="btn" target="_blank">Ir a la página del juego</a>
                 </div>
                 
                 <div class="manual-link">
@@ -184,8 +179,8 @@
                 </div>
                 
                 <div class="info">
-                    <p><strong>💡 Consejo:</strong> Copia el enlace manual y pégalo en tu navegador, o guárdalo para usar más tarde.</p>
-                    <p><strong>📋 Información del Servidor:</strong></p>
+                    <p><strong>Consejo:</strong> Copia el enlace manual y pégalo en tu navegador, o guárdalo para usarlo más tarde</p>
+                    <p><strong>Información del servidor:</strong></p>
                     <p>Place ID: <code>${placeId}</code></p>
                     <p>Job ID: <code>${jobId}</code></p>
                 </div>
