@@ -1,191 +1,25 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Joiner</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-align: center;
-            padding: 50px 20px;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-        
-        h1 {
-            margin-bottom: 20px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .loading {
-            font-size: 1.2em;
-            margin: 20px 0;
-        }
-        
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 4px solid #fff;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .error {
-            background: rgba(255, 0, 0, 0.2);
-            border: 1px solid rgba(255, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-        
-        .info {
-            background: rgba(0, 255, 255, 0.2);
-            border: 1px solid rgba(0, 255, 255, 0.5);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-        
-        .manual-link {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-            word-break: break-all;
-            font-family: monospace;
-        }
-        
-        .btn {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 1.1em;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Uniéndose al servidor</h1>
-        <div id="status">
-            <div class="spinner"></div>
-            <div class="loading">Redirigiendo a roblox...</div>
-        </div>
-        <div id="error-container" style="display: none;"></div>
-    </div>
+	<meta charset="utf-8">
+	<title>Joining Roblox</title>
+	<script>
+		window.onload = function()
+		{
+			const params = new URLSearchParams(window.location.search);
+			const placeId = params.get('placeId');
+			const gameInstanceId = params.get('gameInstanceId');
 
-    <script>
-        window.onload = function() {
-            const params = new URLSearchParams(window.location.search);
-            const placeId = params.get('placeId');
-            const jobId = params.get('jobId');
-            const gameInstanceId = params.get('gameInstanceId');
-            
-            const instanceId = jobId || gameInstanceId;
-            
-            if (placeId && instanceId) {
-                const robloxLink = `roblox://placeId=${placeId}&jobId=${instanceId}`;
-        
-                setTimeout(() => {
-                    try {
-                        window.location.href = robloxLink;
-                        
-                        setTimeout(() => {
-                            showManualOptions(placeId, instanceId, robloxLink);
-                        }, 3000);
-                        
-                    } catch (error) {
-                        showError("Error al intentar abrir Roblox automáticamente.");
-                        showManualOptions(placeId, instanceId, robloxLink);
-                    }
-                }, 2000);
-                
-            } else {
-                showError("Error: Faltan parámetros requeridos (placeId y jobId/gameInstanceId).");
-            }
-        };
-        
-        function showError(message) {
-            const statusDiv = document.getElementById('status');
-            const errorDiv = document.getElementById('error-container');
-            
-            statusDiv.style.display = 'none';
-            errorDiv.style.display = 'block';
-            errorDiv.innerHTML = `
-                <div class="error">
-                    <h3>❌ Error</h3>
-                    <p>${message}</p>
-                </div>
-            `;
-        }
-        
-        function showManualOptions(placeId, jobId, robloxLink) {
-            const container = document.querySelector('.container');
-            
-            container.innerHTML = `
-                <h1>Unirse al servidor</h1>
-                <div class="info">
-                    <h3>📱 Instrucciones</h3>
-                    <p>Si Roblox no se abrió automáticamente, puedes:</p>
-                </div>
-                
-                <div style="margin: 20px 0;">
-                    <a href="${robloxLink}" class="btn">Abrir roblox</a>
-                    <a href="https://www.roblox.com/games/${placeId}" class="btn" target="_blank">Ir a la página del juego</a>
-                </div>
-                
-                <div class="manual-link">
-                    <strong>Enlace manual:</strong><br>
-                    <code>${robloxLink}</code>
-                </div>
-                
-                <div class="info">
-                    <p><strong>Consejo:</strong> Copia el enlace manual y pégalo en tu navegador, o guárdalo para usarlo más tarde</p>
-                    <p><strong>Información del servidor:</strong></p>
-                    <p>Place ID: <code>${placeId}</code></p>
-                    <p>Job ID: <code>${jobId}</code></p>
-                </div>
-            `;
-        }
-    </script>
-</body>
+			if (placeId && gameInstanceId)
+			{
+				window.location.href = `roblox://placeID=${placeId}&gameInstanceId=${gameInstanceId}`;
+			}
+			else
+			{
+				document.body.textContent = "Error: Missing Place ID or Game Instance ID.";
+			}
+		};
+	</script>
+</head>
+<body></body>
 </html>
